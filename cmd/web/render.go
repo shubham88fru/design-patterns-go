@@ -11,15 +11,15 @@ type templateData struct {
 	Data map[string]any
 }
 
-func (app *application) render(w http.ResponseWriter, t string, td *templateData) {
+func (app *application) Render(w http.ResponseWriter, t string, td *templateData) {
 	var tmpl *template.Template
 
-	// if we are using the template cache, try to get template from our 
+	// if we are using the template cache, try to get template from our
 	// map, stored in the receiver.
 	if app.config.useCache {
 		if templateFromMap, ok := app.templateMap[t]; ok {
 			tmpl = templateFromMap
-		} 
+		}
 	}
 
 	if tmpl == nil {

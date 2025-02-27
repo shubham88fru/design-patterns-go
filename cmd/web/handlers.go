@@ -9,12 +9,12 @@ import (
 )
 
 func (app *application) ShowHome(w http.ResponseWriter, r *http.Request) {
-	app.render(w, "home.page.gohtml", nil)
+	app.Render(w, "home.page.gohtml", nil)
 }
 
 func (app *application) ShowPage(w http.ResponseWriter, r *http.Request) {
 	page := chi.URLParam(r, "page")
-	app.render(w, page+".page.gohtml", nil)
+	app.Render(w, page+".page.gohtml", nil)
 }
 
 func (app *application) CreateDogFromFactory(w http.ResponseWriter, r *http.Request) {
@@ -25,4 +25,8 @@ func (app *application) CreateDogFromFactory(w http.ResponseWriter, r *http.Requ
 func (app *application) CreateCatFromFactory(w http.ResponseWriter, r *http.Request) {
 	var t toolbox.Tools
 	_ = t.WriteJSON(w, http.StatusOK, pets.NewPet("cat"))
+}
+
+func (app *application) TestPatterns(w http.ResponseWriter, r *http.Request) {
+	app.Render(w, "test.page.gohtml", nil)
 }
