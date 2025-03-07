@@ -8,6 +8,8 @@ import (
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/shubham88fru/degign-patterns-go/models"
 )
 
 const port = ":4000"
@@ -15,12 +17,13 @@ const port = ":4000"
 type application struct {
 	templateMap map[string]*template.Template
 	config      appConfig
+	DB          *sql.DB
+	Models      models.Models
 }
 
 type appConfig struct {
 	useCache bool
 	dsn      string
-	DB       *sql.DB
 }
 
 func main() {
@@ -37,7 +40,8 @@ func main() {
 	if err != nil {
 		log.Panic(err)
 	}
-	app.config.DB = db
+	app.DB = db
+	app.Models = *models.New(db)
 
 	srv := &http.Server{
 		Addr:              port,
