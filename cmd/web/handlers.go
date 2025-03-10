@@ -55,7 +55,7 @@ func (app *application) CreateCatFromAbstractFactory(w http.ResponseWriter, r *h
 
 }
 
-func (app *application) GetAllDogBreeds(w http.ResponseWriter, r *http.Request) {
+func (app *application) GetAllDogBreedsJSON(w http.ResponseWriter, r *http.Request) {
 	var t toolbox.Tools
 	dogBreeds, err := app.Models.DogBreed.All()
 	if err != nil {
