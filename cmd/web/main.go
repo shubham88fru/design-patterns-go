@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/shubham88fru/degign-patterns-go/models"
+	"github.com/shubham88fru/degign-patterns-go/configuration"
 )
 
 const port = ":4000"
@@ -16,7 +16,7 @@ const port = ":4000"
 type application struct {
 	templateMap map[string]*template.Template
 	config      appConfig
-	Models      models.Models
+	App         *configuration.Application
 }
 
 type appConfig struct {
@@ -38,7 +38,8 @@ func main() {
 	if err != nil {
 		log.Panic(err)
 	}
-	app.Models = *models.New(db)
+
+	app.App = configuration.New(db)
 
 	srv := &http.Server{
 		Addr:              port,
