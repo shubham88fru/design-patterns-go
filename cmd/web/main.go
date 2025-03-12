@@ -1,7 +1,6 @@
 package main
 
 import (
-	"database/sql"
 	"flag"
 	"fmt"
 	"html/template"
@@ -17,7 +16,6 @@ const port = ":4000"
 type application struct {
 	templateMap map[string]*template.Template
 	config      appConfig
-	DB          *sql.DB
 	Models      models.Models
 }
 
@@ -40,7 +38,6 @@ func main() {
 	if err != nil {
 		log.Panic(err)
 	}
-	app.DB = db
 	app.Models = *models.New(db)
 
 	srv := &http.Server{
