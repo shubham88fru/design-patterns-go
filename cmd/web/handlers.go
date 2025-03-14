@@ -85,3 +85,14 @@ func (app *application) CreateDogWithBuilder(w http.ResponseWriter, r *http.Requ
 	}
 	_ = t.WriteJSON(w, http.StatusOK, dog)
 }
+
+func (app *application) GetAllCatBreeds(w http.ResponseWriter, r *http.Request) {
+	var t toolbox.Tools
+	catBreeds, err := app.CatService.GetAllBreeds()
+	if err != nil {
+		_ = t.ErrorJSON(w, err, http.StatusBadRequest)
+	}
+
+	_ = t.WriteJSON(w, http.StatusOK, catBreeds)
+
+}
