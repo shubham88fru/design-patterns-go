@@ -40,15 +40,15 @@ func (d *DogBreed) All() ([]*DogBreed, error) {
 }
 
 type CatBreed struct {
-	ID               int    `json:"id"`
-	Breed            string `json:"breed"`
-	WeigthLowLbs     int    `json:"weight_low_lbs"`
-	WeigthHighLbs    int    `json:"weight_high_lbs"`
-	AverageWeight    int    `json:"average_weight"`
-	LifeSpan         int    `json:"average_lifespan"`
-	Details          string `json:"details"`
-	AlternateNames   string `json:"alternate_names"`
-	GeographicOrigin string `json:"geographic_origin"`
+	ID               int    `json:"id" xml:"id"`
+	Breed            string `json:"breed" xml:"breed"`
+	WeigthLowLbs     int    `json:"weight_low_lbs" xml:"weight_low_lbs"`
+	WeigthHighLbs    int    `json:"weight_high_lbs" xml:"weight_high_lbs"`
+	AverageWeight    int    `json:"average_weight" xml:"average_weight"`
+	LifeSpan         int    `json:"average_lifespan" xml:"average_lifespan"`
+	Details          string `json:"details" xml:"details"`
+	AlternateNames   string `json:"alternate_names" xml:"alternate_names"`
+	GeographicOrigin string `json:"geographic_origin" xml:"geographic_origin"`
 }
 
 type Dog struct {
