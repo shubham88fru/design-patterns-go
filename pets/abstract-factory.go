@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/shubham88fru/degign-patterns-go/configuration"
 	"github.com/shubham88fru/degign-patterns-go/models"
 )
 
@@ -29,6 +30,7 @@ func (dff *CatFromFactory) Show() string { //CatFromFactory implements AnimalInt
 
 type PetFactoryInterface interface {
 	newPet() AnimalInterface
+	newPetWithBreed(breed string) AnimalInterface
 }
 
 type DogAbstractFactory struct{}
@@ -44,6 +46,17 @@ func (d *DogAbstractFactory) newPet() AnimalInterface {
 	}
 }
 
+func (d *DogAbstractFactory) newPetWithBreed(b string) AnimalInterface {
+	app := configuration.GetInstance()
+	breed, _ := app.Models.DogBreed.GetBreedByName(b)
+	return &DogFromFactory{
+		Pet: &models.Dog{
+			Breed: *breed,
+		},
+	}
+
+}
+
 type CatAbstractFactory struct{}
 
 func (c *CatAbstractFactory) newPet() AnimalInterface {
@@ -53,6 +66,16 @@ func (c *CatAbstractFactory) newPet() AnimalInterface {
 			Breed: models.CatBreed{
 				Breed: "Siamese",
 			},
+		},
+	}
+}
+
+func (cf *CatAbstractFactory) newPetWithBreed(b string) AnimalInterface {
+	// app := configuration.GetInstance()
+	// breed, _ := app.Models.CatBreed.GetBreedByName(b)
+	return &CatFromFactory{
+		Pet: &models.Cat{
+			// Breed: breed
 		},
 	}
 }
@@ -70,10 +93,13 @@ func NewPetFromAbstractFactory(species string) (AnimalInterface, error) {
 func NewPetWithBreedFromAbstractFactory(species, breed string) (AnimalInterface, error) {
 	switch species {
 	case "dog":
-		return &DogFromFactory{}, nil
+		// var dogFactory DogAbstractFactory
+		// dog := dogFactory.newPetWithBreed(breed)
 	case "cat":
 		return &CatFromFactory{}, nil
 	default:
 		return nil, errors.New("Invalid species supplied")
 	}
+
+	return nil, nil
 }
