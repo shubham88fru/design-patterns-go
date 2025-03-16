@@ -3,6 +3,7 @@ package pets
 import (
 	"errors"
 	"fmt"
+	"log"
 
 	"github.com/shubham88fru/degign-patterns-go/configuration"
 	"github.com/shubham88fru/degign-patterns-go/models"
@@ -71,11 +72,16 @@ func (c *CatAbstractFactory) newPet() AnimalInterface {
 }
 
 func (cf *CatAbstractFactory) newPetWithBreed(b string) AnimalInterface {
-	// app := configuration.GetInstance()
-	// breed, _ := app.Models.CatBreed.GetBreedByName(b)
+	app := configuration.GetInstance()
+	breed, err := app.CatService.Remote.GetCatBreedByName(b)
+	if err != nil {
+		log.Println(err)
+		return nil
+	}
+
 	return &CatFromFactory{
 		Pet: &models.Cat{
-			// Breed: breed
+			Breed: *breed,
 		},
 	}
 }
@@ -93,10 +99,13 @@ func NewPetFromAbstractFactory(species string) (AnimalInterface, error) {
 func NewPetWithBreedFromAbstractFactory(species, breed string) (AnimalInterface, error) {
 	switch species {
 	case "dog":
-		// var dogFactory DogAbstractFactory
-		// dog := dogFactory.newPetWithBreed(breed)
+		var dogFactory DogAbstractFactory
+		dog := dogFactory.newPetWithBreed(breed)
+		return dog, nil
 	case "cat":
-		return &CatFromFactory{}, nil
+		var catFactory CatAbstractFactory
+		cat := catFactory.newPetWithBreed(breed)
+		return cat, nil
 	default:
 		return nil, errors.New("Invalid species supplied")
 	}
