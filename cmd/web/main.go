@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/shubham88fru/degign-patterns-go/adapters"
 	"github.com/shubham88fru/degign-patterns-go/configuration"
 )
 
@@ -17,7 +18,6 @@ type application struct {
 	templateMap map[string]*template.Template
 	config      appConfig
 	App         *configuration.Application
-	CatService  *RemoteService
 }
 
 type appConfig struct {
@@ -40,11 +40,10 @@ func main() {
 		log.Panic(err)
 	}
 
-	jsonBackend := &JSONBackend{}
-	jsonAdapter := &RemoteService{Remote: jsonBackend}
+	jsonBackend := &adapters.JSONBackend{}
+	jsonAdapter := &adapters.RemoteService{Remote: jsonBackend}
 
-	app.App = configuration.New(db)
-	app.CatService = jsonAdapter
+	app.App = configuration.New(db, jsonAdapter)
 
 	srv := &http.Server{
 		Addr:              port,
