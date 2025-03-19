@@ -3,8 +3,10 @@ package main
 import (
 	"net/http"
 	"net/url"
+	"time"
 
 	"github.com/go-chi/chi/v5"
+	"github.com/shubham88fru/degign-patterns-go/models"
 	"github.com/shubham88fru/degign-patterns-go/pets"
 	"github.com/tsawler/toolbox"
 )
@@ -118,4 +120,38 @@ func (app *application) AnimalFromAbstractFactory(w http.ResponseWriter, r *http
 
 	//Write the result as JSON.
 	_ = t.WriteJSON(w, http.StatusOK, pet)
+}
+
+func (app *application) DogOfMonth(w http.ResponseWriter, r *http.Request) {
+	// Get the breed
+	breed, _ := app.App.Models.DogBreed.GetBreedByName("German Shepherd Dog")
+
+	//Get the dog of the month
+	dom, _ := app.App.Models.Dog.GetDogOfMonthByID(1)
+
+	layout := "2006-01-02"
+	dob, _ := time.Parse(layout, "2023-11-01")
+
+	//Create the do and decorate
+	dog := models.DogOfMonth{
+		Dog: &models.Dog{
+			ID:                1,
+			DogName:           "Sam",
+			BreedID:           breed.ID,
+			Color:             "Black and Tan",
+			DateOfBirth:       dob,
+			SprayedOrNeutered: 0,
+			Description:       "A loyal and friendly dog",
+			Weight:            20,
+			Breed:             *breed,
+		},
+		Video: dom.Video,
+		Image: dom.Image,
+	}
+
+	//Serve the webpage
+	data := make(map[string]any)
+	data["dog"] = dog
+
+	app.Render(w, "dog-of-month.page.gohtml", &templateData{Data: data})
 }
